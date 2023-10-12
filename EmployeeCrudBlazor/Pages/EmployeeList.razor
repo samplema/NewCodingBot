@@ -1,0 +1,86 @@
+﻿
+@page "/Employees"
+@using EmployeeCrudBlazor.Data
+@inject EmployeeService employeesService
+
+<NavLink class="nav-link" href="AddNewEmployee">
+    <span class="oi oi-plus" aria-hidden="true"> AddNewEmployee</span>
+</NavLink>
+
+<h3>EmployeeList</h3>
+
+@if(EmpObj is null)
+{
+    <p><em>Loading..............!!</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Emp No
+                </th>
+                <th>
+                    Employee Name
+                </th>
+                <th>
+                    Email Address
+                </th>
+                <th>
+                    Designation
+                </th>
+                <th>
+                    Phone Number
+                </th>
+                <th>
+                    Edit
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var emp in EmpObj)
+            {
+                <tr>
+                    <td>
+                        @emp.Id
+                    </td>
+                    <td>
+                        @emp.FullName
+                    </td>
+                    <td>
+                        @emp.EmailAddress
+                    </td>
+                    <td>
+                        @emp.Designation
+                    </td>
+                    <td>
+                        @emp.PhoneNumber
+                    </td>
+                    <td>
+                        <a class="nav-link btn btn-group-sm" href="EditEmployee/@emp.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"> Edit </span>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="nav-link btn btn-group-sm" href="DeleteEmployee/@emp.Id">
+                            <span class="oi oi-trash"  aria-hidden="true"> Delete </span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Employee> EmpObj;
+
+    protected override async Task OnInitializedAsync()
+    {
+        EmpObj = await Task.Run(() => employeesService.GetAllEmployees());
+    }
+}
